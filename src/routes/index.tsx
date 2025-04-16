@@ -1,6 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Welcome from "@/pages/welcome/Welcome";
 import Login from "@/pages/Login/Login";
+import Home from "@/pages/home/Home";
+import PrivateRoute from "@/components/PrivateRoutes/PrivateRoutes";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +19,13 @@ const Routes = () => {
         component={Login}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name="Home" options={{ headerShown: false }}>
+        {() => (
+          <PrivateRoute>
+            <Home />
+          </PrivateRoute>
+        )}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };

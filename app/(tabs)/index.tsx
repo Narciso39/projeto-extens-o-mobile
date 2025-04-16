@@ -1,13 +1,16 @@
 
-import Login from '@/pages/Login/Login';
+
 import Routes from '@/src/routes';
-import { Image, StyleSheet, Platform, View } from 'react-native';
+import { store } from '@/store/store';
+import { Provider } from 'react-redux';
 
 
 export default function HomeScreen() {
   return (
     <>
+     <Provider store={store}>
       <Routes/>
+      </Provider>
     </>
   );
 }
