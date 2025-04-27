@@ -30,6 +30,10 @@ const navigation = useNavigation<NavigationProps>()
       console.error("Login falhou:", error);
     }
   };
+
+  const handleRegister = () => {
+    navigation.navigate("Register");
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.formTitle}> Texto formulario</Text>
@@ -58,7 +62,7 @@ const navigation = useNavigation<NavigationProps>()
           <Text style={styles.subTextButton}>Esqueci a senha</Text>
         </Pressable>
         <Pressable style={styles.subButton}>
-          <Text style={styles.subTextButton}>Cadastrar-se</Text>
+          <Text style={styles.subTextButton} onPress={handleRegister}>Cadastrar-se</Text>
         </Pressable>
       </View>
     </View>
