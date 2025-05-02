@@ -1,13 +1,13 @@
 import api from "@/services/api";
 
-export const userRegister = async (name: string, value: string, password: string) => {
+export const postExpense = async (name: string, value: number, description: string) => {
     try {
         const result = await api.post(
           "/users",
           {
             name,
             value,
-            password,
+            description,
           },
           {
             headers: {

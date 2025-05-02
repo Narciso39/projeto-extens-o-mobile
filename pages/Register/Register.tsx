@@ -3,10 +3,9 @@ import { Pressable, Text, TextInput, View } from "react-native";
 import { styles } from "./styles";
 import { userRegister } from "@/services/user/register/register";
 import { useNavigation } from "expo-router";
-import { RootStackParamList } from "@/src/@types/routes.types";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { NavigationProps } from "@/src/@types/NavigationProps.types";
 
-type NavigationProps = NativeStackNavigationProp<RootStackParamList, "Home">;
+
 
 const Register: React.FC = () => {
   const [name, setName] = useState<any>("");
