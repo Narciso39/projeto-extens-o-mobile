@@ -1,29 +1,37 @@
-import { View, Text } from "react-native";
 import React, { useState } from "react";
-import { Pressable, TextInput } from "react-native-gesture-handler";
+import { Pressable, Text, TextInput, View } from "react-native";
 import { styles } from "./styles";
 import { postExpense } from "@/services/Expenses/postExpense.api";
 import { useNavigation } from "expo-router";
 import { NavigationProps } from "@/src/@types/NavigationProps.types";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
-        // In your ExpenseForm component:
 const ExpenseForm = () => {
-  const [name, setName] = useState<any>();
-  const [value, setValue] = useState<any>();
-  const [description, setDescription] = useState<any>();
+  const [name, setName] = useState<string>("");
+  const [value, setValue] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
 
   const navigation = useNavigation<NavigationProps>();
-   const handleRegister = async () => {
-      try {
-        await postExpense(name, value, description);
-        // console.log(response);
-          navigation.navigate("Home");
-       
-      } catch (error) {
-        console.error("Login falhou:", error);
+  const userId = useSelector((state: RootState) => state.rootAuth.userId);
+
+  const handleRegister = async () => {
+    try {
+      if (!userId) {
+        throw new Error("Usuário não autenticado");
       }
-    };
+
+      const numericValue = parseFloat(value);
+      if (isNaN(numericValue)) {
+        throw new Error("Valor inválido");
+      }
+
+      await postExpense(name, numericValue, description, userId);
+      navigation.navigate("Home");
+    } catch (error) {
+      console.error("Erro ao cadastrar despesa:", error);
+    }
+  };
 
   return (
     <View>
@@ -33,37 +41,27 @@ const ExpenseForm = () => {
           style={styles.formInput}
           placeholder="Nome da despesa"
           autoCapitalize="none"
-          secureTextEntry
-          onChangeText={(name) => setName(name)}
+          onChangeText={setName}
           value={name}
         />
         <TextInput
           style={styles.formInput}
-          placeholder="valor da despesa"
+          placeholder="Valor da despesa"
           keyboardType="numeric"
-          autoCapitalize="none"
-          secureTextEntry
-          onChangeText={(value) => setValue(value)}
+          onChangeText={setValue}
           value={value}
         />
         <TextInput
           style={styles.formInput}
-          placeholder="descrição"
+          placeholder="Descrição"
           autoCapitalize="none"
-          secureTextEntry
-          onChangeText={(description) => setDescription(description)}
+          onChangeText={setDescription}
           value={description}
         />
 
-        <GestureHandlerRootView>
-          <Pressable style={styles.formButton} onPress={handleRegister}>
-            <Text style={styles.textButton}>Cadastrar</Text>
-          </Pressable>
-        </GestureHandlerRootView>
-
-        {/* <Pressable style={styles.formButton} onPress={handleRegister}>
+        <Pressable style={styles.formButton} onPress={handleRegister}>
           <Text style={styles.textButton}>Cadastrar</Text>
-        </Pressable> */}
+        </Pressable>
       </View>
     </View>
   );

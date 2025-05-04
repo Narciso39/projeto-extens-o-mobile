@@ -1,24 +1,55 @@
-import api from "../api";
+import api from "@/services/api";
 
-export const userLogin = async (email: string, password: string) => {
+interface UserAuth {
+  id: string;
+  name: string;
+  email: string;
+}
+
+interface ApiLoginResponse {
+  userAuth: UserAuth;
+  token: string;
+}
+
+interface LoginResponse {
+  token: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+
+export const userLogin = async (
+  email: string,
+  password: string
+): Promise<LoginResponse> => {
   try {
-    const result = await api.post(
-      "/users/auth",
-      {
-        email,
-        password,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await api.post<ApiLoginResponse>("/users/auth", {
+      email,
+      password,
+    });
 
-    //   console.log(result.data);
-    return result.data;
+    if (!response.data?.token || !response.data?.userAuth?.id) {
+      console.error("Estrutura de dados incompleta:", response.data);
+      throw new Error(
+        "A resposta da API não contém todos os dados necessários"
+      );
+    }
+
+    return {
+      token: response.data.token,
+      user: {
+        id: response.data.userAuth.id,
+        name: response.data.userAuth.name,
+        email: response.data.userAuth.email,
+      },
+    };
   } catch (error) {
-    console.error("Erro ao logar:", error);
-    throw error;
+    console.error("Erro detalhado na autenticação:", {
+      error: error || error,
+      request: { email },
+    });
+    throw new Error("Falha no login. Verifique suas credenciais.");
   }
 };

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import { styles } from "./styles";
 import { userLogin } from "@/services/auth/auth";
-import { User } from "@/src/@types/login.types";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/auth/auth";
 import { useNavigation } from "expo-router";
@@ -11,46 +10,65 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 
+// Interface ajustada para refletir a resposta real da API
+interface ApiResponse {
+  token?: string;
+  access_token?: string;
+  user?: {
+    id?: string | number;
+    email?: string;
+  };
+  // Outros campos possíveis
+}
+
 const Login: React.FC = () => {
-  const [email, setEmail] = useState<any>("");
-  const [password, setPassword] = useState<any>("");
-const navigation = useNavigation<NavigationProps>()
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const navigation = useNavigation<NavigationProps>();
   const dispatch = useDispatch();
 
   const handleLogin = async () => {
     try {
-      const response: any = await userLogin(email, password);
-      const token = response.token;
-
-      if (token) {
-        dispatch(login(token));
-        navigation.navigate("Home");
+      const response: ApiResponse = await userLogin(email, password);
+      
+      if (!response.token || !response.user?.id) {
+        throw new Error("Dados de autenticação incompletos");
       }
+  
+      // Isso está correto, desde que a ação login esteja configurada para receber um objeto
+      dispatch(login({
+        token: response.token,
+        userId: response.user.id
+      }));
+      
+      navigation.navigate("Home");
     } catch (error) {
       console.error("Login falhou:", error);
+      // Adicione feedback visual aqui
     }
   };
 
   const handleRegister = () => {
     navigation.navigate("Register");
-  }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.formTitle}> Texto formulario</Text>
+      <Text style={styles.formTitle}>Texto formulario</Text>
       <TextInput
         style={styles.formInput}
         placeholder="Email"
         keyboardType="email-address"
         autoCapitalize="none"
         autoComplete="email"
-        onChangeText={(email) => setEmail(email)}
+        onChangeText={setEmail}
         value={email}
       />
       <TextInput
         style={styles.formInput}
-        placeholder="informe a senha"
+        placeholder="Informe a senha"
         autoCapitalize="none"
-        onChangeText={(password) => setPassword(password)}
+        onChangeText={setPassword}
         value={password}
         secureTextEntry
       />
