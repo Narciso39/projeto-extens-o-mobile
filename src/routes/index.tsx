@@ -1,24 +1,17 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Welcome from "@/pages/welcome/Welcome";
 import Login from "@/pages/Login/Login";
-import Home from "@/pages/home/Home";
 import PrivateRoute from "@/components/PrivateRoutes/PrivateRoutes";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ExpenseForm from "@/components/Forms/Expenses/ExpenseForm";
 import Register from "@/pages/Register/Register";
+import ShowFormExpense from "@/components/ShowFormExpense/ShowFormExpense";
+import MainLayout from "@/components/Mainlayout/Mainlayout";
 
 const Stack = createNativeStackNavigator();
 
 const Routes = () => {
   return (
     <Stack.Navigator>
-      {/* <GestureHandlerRootView style={{ flex: 1 }}> */}
-      {/* <Stack.Screen
-          name="Inicio"
-          component={Home}
-          options={{ headerShown: false }}
-        /> */}
-      {/* </GestureHandlerRootView> */}
       <Stack.Screen
         name="Welcome"
         component={Welcome}
@@ -29,21 +22,33 @@ const Routes = () => {
         component={Login}
         options={{ headerShown: false }}
       />
-
       <Stack.Screen
         name="Register"
         component={Register}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Home" options={{ headerShown: false }}>
+      
+      <Stack.Screen name="Expense" options={{ headerShown: false }}>
         {() => (
           <PrivateRoute>
-            <ExpenseForm />
-            {/* <Home /> */}
+            <MainLayout>
+              <ExpenseForm />
+            </MainLayout>
+          </PrivateRoute>
+        )}
+      </Stack.Screen>
+
+      <Stack.Screen name="ShowForm" options={{ headerShown: false }}>
+        {() => (
+          <PrivateRoute>
+            <MainLayout>
+              <ShowFormExpense />
+            </MainLayout>
           </PrivateRoute>
         )}
       </Stack.Screen>
     </Stack.Navigator>
   );
 };
+
 export default Routes;

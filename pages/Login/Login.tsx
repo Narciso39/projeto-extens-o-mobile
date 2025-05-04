@@ -8,7 +8,7 @@ import { useNavigation } from "expo-router";
 import { RootStackParamList } from "@/src/@types/routes.types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-type NavigationProps = NativeStackNavigationProp<RootStackParamList, "Home">;
+type NavigationProps = NativeStackNavigationProp<RootStackParamList, "Expense">;
 
 // Interface ajustada para refletir a resposta real da API
 interface ApiResponse {
@@ -41,7 +41,7 @@ const Login: React.FC = () => {
         userId: response.user.id
       }));
       
-      navigation.navigate("Home");
+      navigation.navigate("Expense");
     } catch (error) {
       console.error("Login falhou:", error);
       // Adicione feedback visual aqui
@@ -54,7 +54,7 @@ const Login: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.formTitle}>Texto formulario</Text>
+      <Text style={styles.formTitle}>Login</Text>
       <TextInput
         style={styles.formInput}
         placeholder="Email"

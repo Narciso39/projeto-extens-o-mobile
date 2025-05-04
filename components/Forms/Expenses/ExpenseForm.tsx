@@ -27,16 +27,16 @@ const ExpenseForm = () => {
       }
 
       await postExpense(name, numericValue, description, userId);
-      navigation.navigate("Home");
+      navigation.navigate("ShowForm");
     } catch (error) {
       console.error("Erro ao cadastrar despesa:", error);
     }
   };
 
   return (
-    <View>
-      <Text>ExpenseForm</Text>
-      <View>
+    <View style={styles.container}> 
+      <View style={{ width: '100%', alignItems: 'center' }}> 
+        <Text style={styles.formTitle}>Cadastrar Despesa</Text>
         <TextInput
           style={styles.formInput}
           placeholder="Nome da despesa"

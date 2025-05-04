@@ -4,8 +4,8 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: 'center',   
+        justifyContent: 'center', 
     },
     formTitle: {
         fontSize: 36,
@@ -39,7 +39,6 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '80%',
-
     },
     subButton: {
         padding: 10,
